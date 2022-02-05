@@ -19,11 +19,13 @@ int main(void)
 				putchar(hundreds);
 				putchar(tens);
 				putchar(ones);
-				if (hundreds = '7' && tens = '8' && ones = '9')
+
+				if (hundreds != '7' || tens != '8')
 				{
 					putchar(',');
 					putchar(' ');
 				}
+
 			}
 		}
 	}
