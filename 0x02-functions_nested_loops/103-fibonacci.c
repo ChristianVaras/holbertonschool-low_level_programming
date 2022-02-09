@@ -10,7 +10,8 @@ int main(void)
 	int a;
 	int b;
 	int sum = 1;
-	int sum_of_pairs;
+	int sum_of_pairs = 0;
+
 	a = 1;
 	b = 1;
 
@@ -22,7 +23,7 @@ int main(void)
 		if ((sum <= 4000000) && (sum % 2 == 0))
 			sum_of_pairs += sum;
 	}
-	printf("%d\n", sum_of_evens);
+	printf("%d\n", sum_of_pairs);
 
 	return (0);
 }
