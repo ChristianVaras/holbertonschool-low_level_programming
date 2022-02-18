@@ -18,7 +18,7 @@ char *leet(char *s)
 	{
 		for (i = 0; i < 5; i++)
 		{
-			if (*str == lower[i] || *str == (lower[i] -32))
+			if (*str == lower[i] || *str == (lower[i] - 32))
 			{
 				*str = code[i];
 				break;
