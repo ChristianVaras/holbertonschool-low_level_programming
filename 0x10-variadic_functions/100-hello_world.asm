@@ -1,5 +1,11 @@
 section .text
-   global main
+	global main
+
+section .data
+	msg: db 'Hello, Holberton', 0xa
+	len: equ $ - msg
+
+section .text
 
 main:
    mov edx,len
@@ -10,7 +16,3 @@ main:
 
    mov eax,0
    int 0x80
-
-section .data
-   msg: db 'Hello, Holberton', 0xa
-   len: equ $ - msg
