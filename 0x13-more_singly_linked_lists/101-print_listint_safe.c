@@ -1,97 +1,65 @@
 #include "lists.h"
 
-/**
- * count_nodes_till_loop - count nodes to know now many unique nodes to print
- * @head: pointer to head pointer of linked list
- * Return: number of unique nodes in list before a loop
- */
-int count_nodes_till_loop(const listint_t *head)
-{
-	int count = 0;
-	const listint_t *turtle, *hare;
-
-	turtle = hare = head;
-
-	while (turtle != NULL && hare != NULL)
-	{
-		turtle = turtle->next;
-		hare = hare->next->next;
-		count++;
-
-		if (turtle == hare)
-		{
-			turtle = head;
-			while (turtle != hare)
-			{
-				turtle = turtle->next;
-				hare = hare->next;
-				count++;
-			}
-			return (count);
-		}
-	}
-	return (0);
-}
+listint_t *find_start_loop(const listint_t *);
 
 /**
- * loop - find if there's a loop in linked list
- * @head: pointer to head pointer of linked list
- * Return: 0 if no loop, 1 if loop
- */
-int loop(const listint_t *head)
-{
-	const listint_t *turtle, *hare;
-
-	turtle = hare = head;
-
-	while (turtle != NULL && hare != NULL)
-	{
-		turtle = turtle->next;
-		hare = hare->next->next;
-
-		if (turtle == hare)
-			return (1);
-	}
-	return (0);
-}
-
-/**
- * print_listint_safe - prints list with addresses
- * @head: pointer to head pointer of linked list
- * Return: number of nodes in list, exit(98) if failed
+ * print_listint_safe - function that prints a listint_t linked list
+ *
+ * @head: pointer to listint_t struct
+ *
+ * Return: nodes number
  */
 size_t print_listint_safe(const listint_t *head)
 {
-	int count = 0;
-	int loop_found;
-	size_t num_nodes = 0;
-	const listint_t *tmp;
+	int count = 0, repeat = 0;
+	listint_t *start_loop;
 
 	if (head == NULL)
-		exit(98);
+		return (0);
 
-	loop_found = loop(head);
-
-	if (loop_found == 1) /* print upto last node before loop if loop */
+	start_loop = find_start_loop(head);
+	while (head != NULL)
 	{
-		count = count_nodes_till_loop(head);
-		for (loop_found = 0; loop_found < count; loop_found++)
+		if (head == start_loop)
+			repeat++;
+		if (repeat > 1)
+			break;
+		count++;
+		printf("[%p] %d\n", (void *)head, head->n);
+		head = head->next;
+	}
+	if (start_loop != NULL)
+		printf("-> [%p] %d\n", (void *)start_loop, start_loop->n);
+	return (count);
+}
+/**
+ * find_start_loop - function that finds the start of the loop
+ * of the linked list
+ *
+ * @head: pointer to listint_t struct
+ *
+ * Return: node address where the loop starts
+ */
+listint_t *find_start_loop(const listint_t *head)
+{
+	listint_t *ptr_t = (void *)head, *ptr_h = (void *)head;
+
+	while (ptr_h->next != NULL && ptr_h->next->next != NULL)
+	{
+		ptr_t = ptr_t->next;
+		ptr_h = ptr_h->next->next;
+
+		if (ptr_h == ptr_t)
 		{
-			printf("[%p] %d\n", (void *)tmp, tmp->n);
-			num_nodes += 1;
-			tmp = tmp->next;
+			ptr_t = (void *)head;
+			while (ptr_t != ptr_h)
+			{
+				ptr_t = ptr_t->next;
+				ptr_h = ptr_h->next;
+			}
+			return (ptr_h);
 		}
 	}
-	else if (loop_found == 0) /* print regularly upto NULL if no loop */
-	{
-		tmp = head;
-		while (tmp != NULL)
-		{
-			printf("[%p] %d\n", (void *)tmp, tmp->n);
-			num_nodes += 1;
-			tmp = tmp->next;
-		}
-	}
 
-	return (num_nodes);
+	return (NULL);
 }
